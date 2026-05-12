@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alanvaa06/battle_tested_skills/specs/final_payload.schema.json",
+  "title": "final_payload",
+  "description": "Assembled payload POSTed by the weekly-ai-coordinator to the n8n webhook. Combines research_summary + full newsletter_output + full linkedin_output. n8n routes this to Gmail Agent and LinkedIn Agent branches.",
+  "type": "object",
+  "required": [
+    "pipeline_version",
+    "dispatched_at",
+    "week_ref",
+    "week_start",
+    "week_end",
+    "language",
+    "research_summary",
+    "newsletter",
+    "linkedin"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "pipeline_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+      "description": "Semver-ish. Bump major when payload shape changes in a breaking way."
+    },
+    "dispatched_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp of the POST."
+    },
+    "week_ref": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-W[0-9]{2}$",
+      "description": "Mirrors research_output.meta.week_ref. Used by archive index and n8n routing keys."
+    },
+    "week_start": { "type": "string", "format": "date" },
+    "week_end":   { "type": "string", "format": "date" },
+    "language":   { "type": "string", "examples": ["English", "Spanish (Mexico)"] },
+    "research_summary": {
+      "type": "object",
+      "description": "Compact subset of research_output for n8n routing / analytics. Full research is NOT shipped — only the fields newsletter and linkedin used downstream.",
+      "required": ["dominant_theme", "market_mood", "biggest_move_actor"],
+      "properties": {
+        "dominant_theme":      { "type": "string" },
+        "market_mood":         { "type": "string" },
+        "biggest_move_actor":  { "type": "string" },
+        "items_evaluated":     { "type": "integer", "minimum": 0 }
+      }
+    },
+    "newsletter": {
+      "type": "object",
+      "description": "Full newsletter_output inlined (without the outer 'newsletter_output' wrapper).",
+      "required": ["meta", "section_1", "section_2", "editorial_notes"],
+      "properties": {
+        "meta":            { "$ref": "newsletter_output.schema.json#/properties/newsletter_output/properties/meta" },
+        "section_1":       { "$ref": "newsletter_output.schema.json#/properties/newsletter_output/properties/section_1" },
+        "section_2":       { "$ref": "newsletter_output.schema.json#/properties/newsletter_output/properties/section_2" },
+        "editorial_notes": { "$ref": "newsletter_output.schema.json#/properties/newsletter_output/properties/editorial_notes" }
+      }
+    },
+    "linkedin": {
+      "type": "object",
+      "description": "Full linkedin_output inlined (without the outer 'linkedin_output' wrapper).",
+      "required": ["meta", "post", "editorial_notes"],
+      "properties": {
+        "meta":            { "$ref": "linkedin_output.schema.json#/properties/linkedin_output/properties/meta" },
+        "post":            { "$ref": "linkedin_output.schema.json#/properties/linkedin_output/properties/post" },
+        "editorial_notes": { "$ref": "linkedin_output.schema.json#/properties/linkedin_output/properties/editorial_notes" }
+      }
+    }
+  }
+}

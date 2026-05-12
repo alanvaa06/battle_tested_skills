@@ -1,0 +1,47 @@
+{
+  "linkedin_output": {
+    "meta": {
+      "pattern_used": "C",
+      "language": "English",
+      "word_count": 287,
+      "char_count": 1842,
+      "generated_at": "2026-05-11T07:03:00Z",
+      "week_ref": "2026-W19",
+      "source_research_actor": "Anthropic"
+    },
+    "post": {
+      "hook": "Anthropic just released an Agent SDK that essentially boxes up the daily workflow of an analyst — and most takes on it are dangerous.",
+      "body": "Anthropic just released an Agent SDK that essentially boxes up the daily workflow of an analyst — and most takes on it are dangerous.\n\nThe popular read is that this is a productivity unlock. The logic: if I can spin up a managed agent that runs my models, my memos, and my screens on persistent memory, my output multiplies. More throughput, more alpha.\n\nFrom a quantitative perspective, this is a miscalculation.\n\nWhat actually shipped is a runtime layer — observability, memory, sandboxing, cost levers — that turns workflow execution into a $20-a-month subscription. When the harness becomes a commodity, anything you can do inside that harness ceases to be alpha. It becomes the new beta. If a hundred thousand analysts run the same Agent SDK against the same data with the same prompts, the theoretical edge evaporates into a mathematical consensus.\n\nThis is the Paradox of Skill in motion. As AI raises the floor on technical execution, the variance in pure modeling skill compresses. The consequence is that judgment — knowing when a model is wrong, when a thesis is downstream of a bad assumption, when context defeats the playbook — becomes more valuable, not less.\n\nA few honest limits on the SDK itself: it does not replace primary research, it inherits whatever bias is in your prompts, and persistent memory introduces failure modes that workflow-as-code did not have. Treat it as a force multiplier on a thesis you already understand, not a thesis generator.\n\nThe market does not need faster modelers. It needs professionals who can judge the AI, see its blind spots, and know when the playbook stops applying.\n\nHow are you adapting your investment framework now that workflow execution is a subscription?",
+      "hashtags": [
+        "#ArtificialIntelligence",
+        "#AgenticAI",
+        "#QuantitativeFinance",
+        "#AssetAllocation",
+        "#InvestmentProcess",
+        "#FinTech",
+        "#PortfolioManagement",
+        "#CFA",
+        "#Alpha",
+        "#Beta"
+      ],
+      "char_count": 1842,
+      "ready_to_paste": true,
+      "cta": "How are you adapting your investment framework now that workflow execution is a subscription?"
+    },
+    "editorial_notes": {
+      "pattern_rationale": "Pattern C selected because the research surfaced a single dominant news anchor (Anthropic Agent SDK) with a popular interpretation that maps cleanly to Alan's AI Alpha to Beta thesis. Pattern A would require ownership of the tool; B would require a macro frame the research did not support.",
+      "alan_voice_check": "Practitioner-first phrasing throughout ('What actually shipped is a runtime layer'); no superlatives; explicit limitations paragraph; provocation close, not soft engagement; specific named concept (Paradox of Skill) rather than vague claims.",
+      "limitations_included": true,
+      "hook_type": "news_to_implication",
+      "ai_alpha_beta_thesis_present": true,
+      "sources_cited": [
+        "Anthropic Agent SDK 1.0 release notes 2026-05-07"
+      ],
+      "credentials_used": [
+        "Head of Equities at Valores Mexicanos (implied practitioner lens)",
+        "CFA Charterholder (implied via #CFA + framework reference)"
+      ],
+      "quality_checklist_passed": true
+    }
+  }
+}

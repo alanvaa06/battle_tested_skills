@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alanvaa06/battle_tested_skills/specs/linkedin_output.schema.json",
+  "title": "linkedin_output",
+  "description": "Output contract for linkedin-alan-post skill when pipeline_mode=true. Consumes research_output from weekly-ai-research; emits a ready-to-paste LinkedIn post in Alan Vazquez's voice.",
+  "type": "object",
+  "required": ["linkedin_output"],
+  "properties": {
+    "linkedin_output": {
+      "type": "object",
+      "required": ["meta", "post", "editorial_notes"],
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "type": "object",
+          "required": ["pattern_used", "language", "word_count", "char_count", "generated_at", "week_ref"],
+          "properties": {
+            "pattern_used": {
+              "type": "string",
+              "enum": ["A", "B", "C", "E"],
+              "description": "Pattern A=Built This, B=Macro, C=Industry Reaction (default), E=Tool Comparison. Pattern D (milestone) excluded — never auto-generated from weekly research."
+            },
+            "language": {
+              "type": "string",
+              "examples": ["English", "Spanish (Mexico)", "Bilingual"]
+            },
+            "word_count": { "type": "integer", "minimum": 80, "maximum": 500 },
+            "char_count": { "type": "integer", "minimum": 200 },
+            "generated_at": { "type": "string", "format": "date-time" },
+            "week_ref": { "type": "string", "pattern": "^[0-9]{4}-W[0-9]{2}$" },
+            "source_research_actor": {
+              "type": "string",
+              "description": "research_output.narrative.biggest_move.actor — the news anchor for Pattern C posts."
+            }
+          }
+        },
+        "post": {
+          "type": "object",
+          "required": ["hook", "body", "hashtags", "char_count", "ready_to_paste"],
+          "properties": {
+            "hook": {
+              "type": "string",
+              "minLength": 20,
+              "description": "Single-line opener. Must be one of: diagnostic question, contrarian reframe, news-to-implication, data-first provocation. Banned: 'I'm excited to announce', 'In today's fast-paced world', etc."
+            },
+            "body": {
+              "type": "string",
+              "minLength": 800,
+              "maxLength": 2800,
+              "description": "Full post body including hook as first line. 200-350 words. Paragraphs 1-3 sentences. Generous line breaks (\\n\\n). No emojis. No markdown bold."
+            },
+            "hashtags": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 16,
+              "items": {
+                "type": "string",
+                "pattern": "^#[A-Za-z][A-Za-z0-9]+$",
+                "description": "Single hashtag with leading #. CamelCase. Drawn from Hashtag Library in SKILL.md."
+              }
+            },
+            "char_count": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 3000,
+              "description": "LinkedIn post body character count (excluding hashtags). LinkedIn hard limit is 3000."
+            },
+            "ready_to_paste": {
+              "type": "boolean",
+              "const": true,
+              "description": "True only when post passes Quality Checklist in SKILL.md. Coordinator gates dispatch on this."
+            },
+            "cta": {
+              "type": "string",
+              "description": "Closing line. Engagement invite for A/B/E; provocation for C."
+            }
+          }
+        },
+        "editorial_notes": {
+          "type": "object",
+          "required": [
+            "pattern_rationale",
+            "alan_voice_check",
+            "limitations_included",
+            "hook_type",
+            "ai_alpha_beta_thesis_present"
+          ],
+          "properties": {
+            "pattern_rationale": {
+              "type": "string",
+              "description": "Why this pattern was selected over the others, in 1-2 sentences."
+            },
+            "alan_voice_check": {
+              "type": "string",
+              "description": "Self-audit: confirms practitioner-first phrasing, no superlatives, no self-promotion labels, no filler. Cites the specific Alan-voice tells in this draft."
+            },
+            "limitations_included": {
+              "type": "boolean",
+              "description": "True iff the post explicitly names limitations or caveats of the tool/thesis discussed. Required for credibility."
+            },
+            "hook_type": {
+              "type": "string",
+              "enum": ["diagnostic_question", "contrarian_reframe", "news_to_implication", "data_first_provocation"]
+            },
+            "ai_alpha_beta_thesis_present": {
+              "type": "boolean",
+              "description": "True when the post leans on Alan's AI Alpha → Beta thesis (commoditization → judgment edge). Typical for Pattern C."
+            },
+            "sources_cited": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Named sources, datasets, or research houses referenced in body. e.g. 'Bridgewater 2025', 'Anthropic release notes 2026-05-08'."
+            },
+            "credentials_used": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Audit trail of which Alan facts were referenced. Must come from the 'Who Alan Is' allowlist in SKILL.md — coordinator rejects fabricated credentials."
+            },
+            "quality_checklist_passed": {
+              "type": "boolean",
+              "description": "All 17 Quality Checklist items in linkedin-alan-post SKILL.md passed."
+            }
+          }
+        }
+      }
+    }
+  }
+}
