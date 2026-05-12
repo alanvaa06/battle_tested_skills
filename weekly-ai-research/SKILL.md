@@ -181,6 +181,129 @@ Source: Trendshift, Star History, GitHub Trending.
 
 ---
 
+## Pipeline Mode — Output Contract
+
+This section activates **only when invoked from a coordinator prompt** with `pipeline_mode: true`.
+In all other cases, deliver the markdown briefing as described in Step 4.
+
+When `pipeline_mode: true`, do not write the markdown briefing. Instead, return a single
+JSON object under the key `research_output` with the schema below. This object is consumed
+by the `email-newsletter-ai` and `linkedin-alan-post` skills via the coordinator, then
+assembled into a `final_payload` and POSTed to an n8n webhook.
+
+The canonical schema lives in `specs/research_output.schema.json` in this repo. If you find
+a conflict between this section and the schema file, the schema file wins.
+
+### Top-level shape
+
+```json
+{
+  "research_output": {
+    "meta":      { ... },
+    "narrative": { ... },
+    "sections":  { ... }
+  }
+}
+```
+
+### `meta` fields
+
+| Field | Type | Notes |
+|---|---|---|
+| `week_start` | date | YYYY-MM-DD, inclusive |
+| `week_end` | date | YYYY-MM-DD, inclusive |
+| `week_ref` | string | ISO week, e.g. `2026-W19` |
+| `language` | string | Match user's conversation language. Default English. |
+| `region_focus` | string | Free string set by the coordinator (e.g. `Global`, `Latin America / Mexico`). |
+| `research_window_days` | integer | Default 7. |
+| `generated_at` | date-time | ISO 8601 UTC. |
+| `items_evaluated` | integer | Total candidate items scanned before ranking. Used for analytics. |
+
+### `narrative` fields
+
+| Field | Type | Notes |
+|---|---|---|
+| `executive_summary` | string | 4-7 sentences, single paragraph, leads with the dominant theme. Min 200 chars. |
+| `dominant_theme` | string | One declarative sentence naming the week's cross-pillar pattern. |
+| `market_mood` | enum | One of: `bullish`, `neutral`, `cautious`, `bearish`, `frothy`, `consolidating`. |
+| `market_mood_rationale` | string | 1-2 sentences with specific evidence for the mood call. |
+| `biggest_move` | object | `{actor, move, signal, date}` — the single most consequential action of the week. |
+| `competitive_frontier` | string | 1-2 sentences on where the frontier shifted (capability, distribution, governance, ecosystem). |
+| `open_source_signal` | string | 1-2 sentences on the OSS pattern reflecting or contradicting lab behavior. |
+| `strategic_takeaways` | array | 2-4 items, each `{headline, explanation}`. |
+| `to_watch` | array | 2-4 items, each `{item, type, date_hint}`. `type` is one of `event`, `release`, `open_question`, `rumor`. |
+| `content_angles.newsletter_angle` | string | Editorial frame for newsletter intro — a point of view, not a summary. |
+| `content_angles.linkedin_hook` | string | Pre-drafted hook for LinkedIn. Must be diagnostic question, contrarian reframe, news-to-implication, or data-first provocation. |
+| `content_angles.linkedin_pattern_recommendation` | enum | One of `A`, `B`, `C`, `E`. Pattern D (milestone) is excluded from pipeline mode. |
+
+### `sections` fields
+
+| Field | Type | Notes |
+|---|---|---|
+| `frontier_models` | object | Keys: `anthropic`, `openai`, `google`, `xai`, optional `other`. Each is an array of `lab_item`s. |
+| `agent_capabilities` | object | `{items: dev_item[], pattern: string}`. `pattern` is a one-sentence synthesis. |
+| `developer_environment` | object | `{items: dev_item[]}`. |
+| `trending_repos.repos` | array | Min 5 items, each: `{owner_repo, stars_total, stars_weekly_delta, description, category, source_url}`. |
+| `trending_repos.hot_categories` | array | 1-6 items, each: `{category, aggregate_stars}`. |
+
+**`lab_item` shape** (required: `fact`, `date`, `source_url`):
+```json
+{
+  "fact": "What shipped — specific. Include benchmark / pricing if available.",
+  "date": "YYYY-MM-DD",
+  "category": "model_release | capability_update | pricing | safety_policy | infrastructure_deal | enterprise_feature",
+  "source_url": "https://...",
+  "metric": "Optional benchmark or KPI value tied to the fact."
+}
+```
+
+**`dev_item` shape** (required: `fact`):
+```json
+{
+  "fact": "...",
+  "actor": "...",
+  "date": "YYYY-MM-DD",
+  "source_url": "https://..."
+}
+```
+
+**Repo `category` enum**: `skills`, `agent_framework`, `coding_agent`, `multi_agent`, `infra`, `workflow`, `local_inference`, `other`.
+
+### Pipeline Mode rules — apply across the JSON
+
+- Every `lab_item` and every repo **must** include a primary `source_url`. No URL = drop the item.
+- All string values are JSON-safe — escape quotes, no raw line breaks inside strings.
+- Plain text only — no markdown formatting, no emojis, no bullet characters inside string values.
+- Do not invent benchmark numbers, star counts, or dates. If a number cannot be verified, omit it or describe directionally in the surrounding `narrative` field.
+- `narrative.content_angles.linkedin_hook` must be a single line that the `linkedin-alan-post` skill can use verbatim or adapt. Avoid banned hooks listed in that skill (`I'm excited to announce`, etc.).
+- `narrative.content_angles.linkedin_pattern_recommendation` should default to `C` when the week has a clear single news anchor (most weeks). Use `B` for macro-heavy weeks, `A` only when a tool Alan built is the anchor, `E` only when the week's narrative is a tool-vs-tool comparison.
+- `meta.items_evaluated` is the total number of candidate items considered before ranking — set this honestly so the coordinator can log inclusion ratio.
+
+### Coordinator validation gates (must pass on output)
+
+The coordinator validates these before proceeding. If any fail, it re-prompts once.
+
+- [ ] `meta.week_start` and `week_end` are valid dates
+- [ ] `narrative.executive_summary` is at least 4 sentences (~200+ chars)
+- [ ] `narrative.dominant_theme` is a single populated sentence
+- [ ] `narrative.biggest_move.actor` is non-empty
+- [ ] `narrative.content_angles.newsletter_angle` is populated
+- [ ] `narrative.content_angles.linkedin_hook` is populated
+- [ ] `narrative.strategic_takeaways` has at least 2 items
+- [ ] `narrative.to_watch` has 2-4 items
+- [ ] `sections.frontier_models` has entries for `anthropic`, `openai`, `google`, `xai`
+- [ ] `sections.trending_repos.repos` has at least 5 entries
+- [ ] All string values are JSON-safe
+- [ ] Every `lab_item` and repo has a `source_url`
+
+### Output rules in `pipeline_mode`
+
+- Return **only** the JSON object. No markdown, no commentary before or after, no code fence wrapper unless the harness strips it.
+- Do not save a markdown briefing file. The coordinator does not read filesystem outputs in pipeline mode.
+- A reference fixture matching this contract lives at `specs/fixtures/research_output.example.json`.
+
+---
+
 ## Tone & Style Rules
 
 - Voice of a senior market research analyst — precise, confident, signal-dense

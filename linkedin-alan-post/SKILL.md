@@ -304,3 +304,109 @@ If the draft fails any item, revise before delivering.
 Deliver the post directly in the chat as plain text — ready to paste into LinkedIn. Do not wrap in code blocks. Do not add commentary before or after unless the user asked for explanation.
 
 If the user wants alternatives, produce 2–3 variants clearly labeled by pattern or angle (e.g., "Version A — Pattern C, leaning into AI Alpha → Beta" / "Version B — Pattern A, focused on the build").
+
+---
+
+## Pipeline Mode — Input & Output Contract
+
+This section activates **only when invoked from a coordinator prompt** with `pipeline_mode: true`.
+In all other cases, take input directly from the user's message and deliver plain text.
+
+### When `pipeline_mode: true`
+
+All input comes from a `research_output` JSON object passed by the coordinator. Do not perform
+additional web research. Do not invent facts not present in the input.
+
+The canonical schemas live in `specs/research_output.schema.json` (input) and
+`specs/linkedin_output.schema.json` (output) in this repo. If you find a conflict between this
+section and the schema files, the schema files win.
+
+### Input field mapping — what to read from `research_output`
+
+| Decision | Source field |
+|---|---|
+| Pattern selection | `research_output.narrative.content_angles.linkedin_pattern_recommendation` (override only if the recommended pattern clearly does not fit the available material) |
+| Hook seed | `research_output.narrative.content_angles.linkedin_hook` (use verbatim or adapt; must still match one of the four sanctioned hook types) |
+| News anchor (Pattern C) | `research_output.narrative.biggest_move` — `{actor, move, signal, date}` |
+| Macro thesis material (Pattern B) | `research_output.narrative.executive_summary` + `competitive_frontier` + relevant `sections.frontier_models` items |
+| Tool comparison material (Pattern E) | `research_output.sections.developer_environment.items` |
+| Sources to cite | `source_url` fields on `lab_items` and repos — only cite items the user can verify |
+| Week reference | `research_output.meta.week_ref` |
+| Language | `research_output.meta.language` |
+
+**Pattern D is banned in pipeline mode** — never auto-generate a milestone post from weekly research. The coordinator rejects `pattern_used == "D"`.
+
+### Pattern selection rules (pipeline mode)
+
+- Default to `linkedin_pattern_recommendation` from `research_output`.
+- If the recommendation is `C` (most weeks), build around `biggest_move`.
+- If the recommendation is `B`, build the macro thesis from `executive_summary` and named sources only. Do not invent data points the research did not surface.
+- If the recommendation is `A`, **abort and return an error object** — `A` requires a tool Alan personally built, which weekly research will not surface. The coordinator handles this as a validation failure.
+- If the recommendation is `E`, require two named tools in `developer_environment.items`. If only one is present, fall back to `C`.
+
+### Output shape — `linkedin_output`
+
+Return a single JSON object under the key `linkedin_output`. No chat text. No markdown outside the JSON.
+
+```json
+{
+  "linkedin_output": {
+    "meta": {
+      "pattern_used": "A | B | C | E",
+      "language": "English | Spanish (Mexico) | Bilingual",
+      "word_count": 0,
+      "char_count": 0,
+      "generated_at": "ISO 8601 UTC",
+      "week_ref": "YYYY-WNN",
+      "source_research_actor": "Carried from research_output.narrative.biggest_move.actor"
+    },
+    "post": {
+      "hook": "Single-line opener — one of the four sanctioned hook types.",
+      "body": "Full post body including the hook as its first line. 200-350 words. Paragraphs 1-3 sentences. Generous \\n\\n between paragraphs. No emojis. No markdown bold.",
+      "hashtags": ["#CamelCase", "#TagsFromHashtagLibrary"],
+      "char_count": 0,
+      "ready_to_paste": true,
+      "cta": "Closing line — engagement invite for A/B/E; provocation for C."
+    },
+    "editorial_notes": {
+      "pattern_rationale": "Why this pattern was selected, in 1-2 sentences.",
+      "alan_voice_check": "Self-audit citing the specific Alan-voice tells in this draft (practitioner phrasing, limitation paragraph, no superlatives, etc).",
+      "limitations_included": true,
+      "hook_type": "diagnostic_question | contrarian_reframe | news_to_implication | data_first_provocation",
+      "ai_alpha_beta_thesis_present": true,
+      "sources_cited": ["Named source 1", "Named source 2"],
+      "credentials_used": ["Allowlisted Alan facts referenced — must come from 'Who Alan Is'"],
+      "quality_checklist_passed": true
+    }
+  }
+}
+```
+
+### Pipeline Mode rules — apply across the JSON
+
+- `meta.pattern_used` must be `A`, `B`, `C`, or `E`. Pattern `D` is rejected by the coordinator.
+- `post.body` must contain `post.hook` as its first line (verbatim or as the first sentence).
+- `post.body.char_count` must be ≤ 3000 (LinkedIn hard limit).
+- `post.hashtags` length 3-16, drawn from the Hashtag Library above. CamelCase, no leading digits.
+- `post.ready_to_paste` is `true` **only when every Quality Checklist item passes**. The coordinator gates dispatch on this — set it to `false` and re-draft if any item fails.
+- `editorial_notes.limitations_included` is `true` **only when the body explicitly names limits or caveats of the tool/thesis discussed**. This is non-negotiable for Alan's brand — a post without limitations is rejected.
+- `editorial_notes.credentials_used` items must all trace to the "Who Alan Is" allowlist. If a fact is not on the allowlist, do not use it — the coordinator audits this list against the allowlist.
+- All string values are JSON-safe.
+
+### Coordinator validation gates (must pass on output)
+
+- [ ] `post.hook` is non-empty
+- [ ] `post.body` contains the hook as its first line
+- [ ] `post.hashtags` has at least 3 items
+- [ ] `post.char_count` is > 0 and ≤ 3000
+- [ ] `meta.pattern_used` is one of A, B, C, E (not D)
+- [ ] `editorial_notes.alan_voice_check` is a meaningful sentence
+- [ ] `editorial_notes.limitations_included` is `true`
+- [ ] `editorial_notes.quality_checklist_passed` is `true`
+- [ ] All `credentials_used` trace to the "Who Alan Is" allowlist
+
+### Output rules in `pipeline_mode`
+
+- Return **only** the JSON object. No markdown, no commentary before or after.
+- Do not deliver the plain-text post separately — it lives inside `post.body`.
+- A reference fixture matching this contract lives at `specs/fixtures/linkedin_output.example.json`.
