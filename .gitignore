@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets (never commit)
+.env
+.env.*
+*.pem
+*.key
+
+# Per-routine live fixtures policy
+# Keep the most recent run committed for replay; let older runs rotate.
+# (Adjust per routine as needed — currently nothing excluded here.)
