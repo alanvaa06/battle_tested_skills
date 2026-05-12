@@ -1,16 +1,6 @@
-"""End-to-end smoke test of the weekly AI pipeline.
+"""End-to-end smoke test using synthetic fixtures.
 
-Steps:
-  1. Load research_output fixture (would come from weekly-ai-research skill).
-  2. Validate it against schema (Step 1 validation gate in coordinator).
-  3. Load newsletter_output fixture (would come from email-newsletter-ai skill).
-  4. Validate (Step 2a gate).
-  5. Load linkedin_output fixture (would come from linkedin-alan-post skill).
-  6. Validate (Step 2b gate).
-  7. Assemble final_payload (Step 3).
-  8. Validate final_payload (pre-dispatch checklist).
-  9. Simulate dispatch -- print curl command instead of POSTing.
- 10. Print terminal report (Step 6).
+Runs the four schema validations and final payload assembly. No network.
 """
 import json
 import pathlib
@@ -19,16 +9,20 @@ from datetime import datetime, timezone
 import jsonschema
 from referencing import Registry, Resource
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-FIX = ROOT / "fixtures"
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+SCHEMA = ROOT / "pipeline" / "schemas"
+FIX = ROOT / "pipeline" / "fixtures" / "synthetic"
 
-WEBHOOK_URL = "https://n8n.alanvaa.cloud/webhook/provex-ai-news-weekly"
 
 def load_schema(name: str) -> dict:
-    return json.loads((ROOT / f"{name}.schema.json").read_text(encoding="utf-8"))
+    return json.loads((SCHEMA / f"{name}.schema.json").read_text(encoding="utf-8"))
+
 
 def load_fixture(name: str) -> dict:
     return json.loads((FIX / f"{name}.example.json").read_text(encoding="utf-8"))
+
+
+WEBHOOK_URL = "https://n8n.alanvaa.cloud/webhook/provex-ai-news-weekly"
 
 def validate(name: str, payload: dict, registry: Registry | None = None) -> None:
     schema = load_schema(name)

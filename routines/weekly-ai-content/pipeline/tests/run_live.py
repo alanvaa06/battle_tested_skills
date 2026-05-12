@@ -1,8 +1,8 @@
-"""Live end-to-end smoke test using real research from week 2026-W19.
+"""Live end-to-end smoke test using real research data.
 
-Loads research_output, newsletter_output, linkedin_output from this dir;
-validates each against its schema; assembles final_payload; validates that
-too; writes final_payload.json; prints a terminal report.
+Loads research_output, newsletter_output, linkedin_output from
+pipeline/fixtures/live/; validates each against its schema; assembles
+final_payload; validates that too; prints a terminal report.
 """
 import json
 import pathlib
@@ -11,12 +11,14 @@ from datetime import datetime, timezone
 import jsonschema
 from referencing import Registry, Resource
 
-ROOT = pathlib.Path(__file__).resolve().parents[3]      # repo root
-SCHEMA = ROOT / "specs"
-LIVE = ROOT / "specs" / "fixtures" / "live"
+ROUTINE = pathlib.Path(__file__).resolve().parents[2]
+SCHEMA = ROUTINE / "pipeline" / "schemas"
+LIVE = ROUTINE / "pipeline" / "fixtures" / "live"
+
 
 def load_schema(name: str) -> dict:
     return json.loads((SCHEMA / f"{name}.schema.json").read_text(encoding="utf-8"))
+
 
 def load_live(name: str) -> dict:
     return json.loads((LIVE / f"{name}.json").read_text(encoding="utf-8"))
@@ -109,7 +111,7 @@ print(f"  [ok] final_payload.schema.json")
 out = LIVE / "final_payload.json"
 out.write_text(json.dumps(final_payload, indent=2, ensure_ascii=False), encoding="utf-8")
 payload_bytes = out.stat().st_size
-print(f"  written:         {out.relative_to(ROOT)} ({payload_bytes:,} bytes)")
+print(f"  written:         {out.relative_to(ROUTINE)} ({payload_bytes:,} bytes)")
 
 banner("STEP 4 -- dispatch (DRY RUN -- no POST executed)")
 print(f"  curl -X POST 'https://n8n.alanvaa.cloud/webhook/provex-ai-news-weekly' \\")
