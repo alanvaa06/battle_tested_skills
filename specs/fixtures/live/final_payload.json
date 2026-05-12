@@ -1,0 +1,285 @@
+{
+  "pipeline_version": "1.0",
+  "dispatched_at": "2026-05-12T16:34:01Z",
+  "week_ref": "2026-W19",
+  "week_start": "2026-05-04",
+  "week_end": "2026-05-10",
+  "language": "English",
+  "research_summary": {
+    "dominant_theme": "Compute capacity displaced model quality as the binding constraint on the frontier, forcing alliances between formal rivals.",
+    "market_mood": "bullish",
+    "biggest_move_actor": "Anthropic",
+    "items_evaluated": 38
+  },
+  "newsletter": {
+    "meta": {
+      "generated_at": "2026-05-12T06:35:00Z",
+      "week_start": "2026-05-04",
+      "week_end": "2026-05-10",
+      "week_ref": "2026-W19",
+      "language": "English",
+      "bullet_count": 16,
+      "estimated_read_time_seconds": 195
+    },
+    "section_1": {
+      "intro": "This was the week capex stopped being a footnote in the frontier story. Anthropic rented its entire next leg of compute from Elon Musk's SpaceX while shipping Opus 4.7, OpenAI made GPT-5.5 Instant the new ChatGPT default, and MCP went from Anthropic protocol to cross-vendor substrate in seven days. If your AI thesis still indexes on parameter counts and eval scores, you are reading last quarter's game.",
+      "featured_story": {
+        "actor": "Anthropic",
+        "headline": "Anthropic rents Colossus 1 from SpaceX and resets what the frontier is competing on",
+        "body": "Anthropic took the entire 300 megawatt Colossus 1 cluster from SpaceX on May 6 — roughly 220,000 NVIDIA GPUs from a data center owned by the parent of its closest rival — and used the capacity the same day to double Claude Code rate limits for paid tiers and remove peak-hours throttles on Pro and Max. The signal is not partnership; it is supply. When a frontier lab rents capacity from a competitor's data center, capex has become the binding constraint on the frontier, not parameters or evals. For practitioners that means infrastructure visibility now belongs in any frontier-lab thesis, alongside model quality and ecosystem reach.",
+        "forward_tension": "Watch whether a second frontier lab follows by renting compute from a rival cluster in the next sixty days — that is the move that confirms compute has become a commodity, not a moat."
+      }
+    },
+    "section_2": {
+      "bullets": [
+        {
+          "rank": 1,
+          "label": "MODEL",
+          "actor": "Anthropic",
+          "fact": "Made Claude Opus 4.7 generally available on May 4 with a 1 million token context window, improved long-running coding, and higher-resolution vision at unchanged pricing ($5 in / $25 out per 1M tokens).",
+          "implication": "1M context on Opus pricing turns extended-document analysis from a workflow problem into a single API call.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 2,
+          "label": "MODEL",
+          "actor": "OpenAI",
+          "fact": "Rolled out GPT-5.5 Instant on May 5 as the new ChatGPT default and as chat-latest in the API, with GPT-5.3 Instant kept available to paid users for a three-month deprecation window.",
+          "implication": "Default model swap means consumer ChatGPT quality and API chat-latest behavior shifted overnight; downstream apps pinning chat-latest should retest immediately.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 3,
+          "label": "SIGNAL",
+          "actor": "Industry",
+          "fact": "MCP became the cross-vendor agent substrate this week as AWS, Google, and Microsoft each shipped first-party MCP-native servers or frameworks within 48 hours of each other.",
+          "implication": "Proprietary connector marketplaces are now competing against a shared substrate; vendor lock-in at the connector layer just lost most of its leverage.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 4,
+          "label": "AGENT",
+          "actor": "AWS",
+          "fact": "AWS MCP Server reached general availability on May 6 with IAM guardrails, CloudWatch metrics, CloudTrail logging, and sandboxed Python execution against AWS services for coding agents.",
+          "implication": "Closes the audit gap on agent-driven cloud operations; enterprise procurement teams can now buy MCP without writing their own observability layer.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 5,
+          "label": "AGENT",
+          "actor": "Microsoft",
+          "fact": "Shipped Agent Framework 1.0 on May 6 with multi-agent orchestration, multi-provider model routing, and cross-runtime interoperability over A2A and MCP.",
+          "implication": "First credible enterprise multi-agent runtime that is provider-agnostic by default — pressures every framework to support both A2A and MCP or lose Microsoft-shop deals.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 6,
+          "label": "MODEL",
+          "actor": "xAI",
+          "fact": "Launched SuperGrok Heavy plus standalone Grok Speech-to-Text, Text-to-Speech, and Quality Mode Imagine APIs, with multilingual support and speaker diarization in voice.",
+          "implication": "Voice and image stacks are now first-party on Grok, narrowing OpenAI Realtime's lead and giving X-native developers a parallel multimodal path.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 7,
+          "label": "DEV",
+          "actor": "Anthropic",
+          "fact": "Shipped Claude Code plugins via --plugin-url and .zip packages, an agent view for managing multiple sessions, and the /radio command; rate limits doubled on Pro and Max after the SpaceX deal.",
+          "implication": "Plugin sourcing plus the agent view make Claude Code the first coding agent with a real third-party distribution and multi-session story; the rate-limit lift removes the most common ceiling on heavy users.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 8,
+          "label": "DEV",
+          "actor": "OpenAI",
+          "fact": "Released three Realtime voice models in the API on May 7 — GPT-Realtime-2 for live reasoning, GPT-Realtime-Translate for multilingual speech, GPT-Realtime-Whisper for streaming transcription.",
+          "implication": "Splits voice into reasoning, translation, and transcription as distinct API surfaces; voice-agent builders should re-architect around three thin services instead of one fat model.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 9,
+          "label": "AGENT",
+          "actor": "Google",
+          "fact": "Opened Workspace MCP server to public developer preview on May 7, exposing Gmail and Drive as MCP tools with Workspace identity controls.",
+          "implication": "Email and storage become directly callable from any MCP-compatible agent — the missing third leg of the hyperscaler MCP rollout.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 10,
+          "label": "DEV",
+          "actor": "Anthropic",
+          "fact": "Launched the Claude Platform on AWS on May 6 with managed agents, code execution, web tools, skills, and prompt caching billable through AWS commitments.",
+          "implication": "Removes procurement friction for AWS-centric enterprises; pulls Claude into existing AWS spend envelopes without a separate vendor onboarding.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 11,
+          "label": "REPO",
+          "actor": "mattpocock/skills",
+          "fact": "mattpocock/skills (star 71,700 | +20,000 this week) — reusable Claude Code skills repo that spent the week as the #1 trending AI repo after six straight days at #2.",
+          "implication": "Skill libraries, not new agent frameworks, are where practitioner attention concentrated; the unit of reuse is shrinking from agent to skill.",
+          "repo_meta": {
+            "owner_repo": "mattpocock/skills",
+            "stars_total": 71700,
+            "stars_weekly_delta": 20000
+          }
+        },
+        {
+          "rank": 12,
+          "label": "REPO",
+          "actor": "affaan-m/everything-claude-code",
+          "fact": "affaan-m/everything-claude-code (star ~100,000 | +543 this week) — Claude Code agent harness with 28 subagents, 119 skills, 60 slash commands, and 14 MCP servers; crossed 100K stars in three months.",
+          "implication": "Confirms there is real demand for fully assembled agent harnesses, not just primitives — bundles win where toolchains are still in flux.",
+          "repo_meta": {
+            "owner_repo": "affaan-m/everything-claude-code",
+            "stars_total": 100000,
+            "stars_weekly_delta": 543
+          }
+        },
+        {
+          "rank": 13,
+          "label": "REPO",
+          "actor": "msitarzewski/agency-agents",
+          "fact": "msitarzewski/agency-agents (star ~8,500 | +592 this week) — 147 specialized agents across 12 divisions with multi-tool scripts for Claude Code, Copilot, Cursor, Aider, Windsurf, Qwen Code, and Kimi Code.",
+          "implication": "Multi-tool agent collections are emerging as a category in their own right; portability across coding agents is becoming a hiring-style criterion.",
+          "repo_meta": {
+            "owner_repo": "msitarzewski/agency-agents",
+            "stars_total": 8500,
+            "stars_weekly_delta": 592
+          }
+        },
+        {
+          "rank": 14,
+          "label": "SIGNAL",
+          "actor": "Open source",
+          "fact": "Top trending repos for the week were dominated by skills and harness collections, not new agent frameworks or base models.",
+          "implication": "Composability is moving down to the skill level; investors should treat skill-marketplace bets as a different thesis from agent-framework bets.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 15,
+          "label": "WATCH",
+          "actor": "Google",
+          "fact": "Google I/O 2026 keynote is May 19-20 with a dedicated Gemma session and a Vertex agent track widely expected.",
+          "implication": "Watch for a first-party managed-agent runtime on Vertex — that is the missing piece of Google's harness story versus AWS, Microsoft, and Anthropic.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        },
+        {
+          "rank": 16,
+          "label": "WATCH",
+          "actor": "Industry",
+          "fact": "Open question: whether a second frontier lab follows Anthropic in renting compute from a rival cluster within the next sixty days.",
+          "implication": "If it happens, compute officially becomes a multi-tenant commodity and supplier moats at the cluster level evaporate.",
+          "repo_meta": {
+            "owner_repo": null,
+            "stars_total": 0,
+            "stars_weekly_delta": 0
+          }
+        }
+      ]
+    },
+    "editorial_notes": {
+      "dominant_theme": "Compute capacity displaced model quality as the binding constraint on the frontier, forcing alliances between formal rivals.",
+      "market_mood": "bullish",
+      "ranking_rationale": "Opus 4.7 and GPT-5.5 take ranks 1 and 2 as direct capability shifts that change what practitioners can do today. Rank 3 is the MCP-becomes-substrate SIGNAL — the macro pattern the rest of the list explains. The Anthropic-SpaceX deal sits in the featured story, not the bullets, to avoid duplication; rank 7 surfaces its downstream Claude Code rate-limit effect instead.",
+      "items_included": 16,
+      "items_excluded": 22,
+      "exclusion_reason": "Excluded items were either minor pricing or admin-console tweaks, items without verifiable primary sources, or repos with lower weekly star deltas already represented by category-leading repos."
+    }
+  },
+  "linkedin": {
+    "meta": {
+      "pattern_used": "C",
+      "language": "English",
+      "word_count": 301,
+      "char_count": 1838,
+      "generated_at": "2026-05-12T06:40:00Z",
+      "week_ref": "2026-W19",
+      "source_research_actor": "Anthropic"
+    },
+    "post": {
+      "hook": "Anthropic just rented 300 megawatts of compute from Elon Musk's SpaceX — a company that owns its largest rival — and most takes on it are missing the actual signal.",
+      "body": "Anthropic just rented 300 megawatts of compute from Elon Musk's SpaceX — a company that owns its largest rival — and most takes on it are missing the actual signal.\n\nThe popular read is partnership. Two AI giants find common ground, share infrastructure, the industry matures. Nothing to see.\n\nFrom a capital-allocation perspective, this is a misread.\n\nWhat actually happened is that Anthropic took the entire 300-megawatt Colossus 1 cluster — roughly 220,000 NVIDIA GPUs — from a rival's data center because it could not build the capacity itself fast enough. It used the supply the same day to double Claude Code rate limits for paid tiers and lift peak-hours throttles on Pro and Max. This is not partnership. This is a supplier of last resort.\n\nThe implication is that compute is now the binding constraint on the frontier. Not parameters. Not eval scores. Megawatts. When a frontier lab rents from a competitor's cluster to keep up with demand, the moat people assumed lived inside the model is sitting on a substation in Memphis.\n\nThis is the same dynamic that turned workflow automation into beta last year. As capex becomes the constraint, anything compute can buy you commoditizes. Differentiation has to live somewhere capex cannot reach — judgment, specialized knowledge, context the model cannot infer from its training corpus.\n\nA few honest caveats. The deal is bilateral and reversible. Compute pricing can swing on power costs, GPU supply, and regulatory shifts faster than any equity thesis can keep up. And a single transaction does not prove a trend; if a second lab follows in the next sixty days, it does.\n\nThe market does not need more allocators reading model cards. It needs allocators reading power bills and substation queues.\n\nHow is compute capacity entering your investment process for the AI cohort?",
+      "hashtags": [
+        "#ArtificialIntelligence",
+        "#AgenticAI",
+        "#AssetAllocation",
+        "#QuantitativeFinance",
+        "#InvestmentProcess",
+        "#Capex",
+        "#CapitalMarkets",
+        "#PortfolioManagement",
+        "#CFA",
+        "#Alpha",
+        "#Beta"
+      ],
+      "char_count": 1838,
+      "ready_to_paste": true,
+      "cta": "How is compute capacity entering your investment process for the AI cohort?"
+    },
+    "editorial_notes": {
+      "pattern_rationale": "Research recommended Pattern C and the week has a single dominant news anchor (Anthropic taking Colossus 1 from SpaceX). The story maps cleanly onto the AI Alpha to Beta thesis applied to compute supply — making C the sharpest available frame.",
+      "alan_voice_check": "Practitioner-first framing throughout (capital-allocation perspective, allocators reading power bills); specific named numbers (300 MW, 220,000 GPUs, Memphis substation); explicit caveat paragraph; provocation close instead of soft invite; no superlatives or hype verbs; thesis is intellectually honest rather than promotional.",
+      "limitations_included": true,
+      "hook_type": "news_to_implication",
+      "ai_alpha_beta_thesis_present": true,
+      "sources_cited": [
+        "Anthropic 'Higher usage limits for Claude and a compute deal with SpaceX' 2026-05-06",
+        "xAI 'New Compute Partnership with Anthropic' 2026-05-06"
+      ],
+      "credentials_used": [
+        "Head of Equities at Valores Mexicanos (implied via capital-allocation framing)",
+        "CFA Charterholder (referenced via #CFA tag)"
+      ],
+      "quality_checklist_passed": true
+    }
+  }
+}
