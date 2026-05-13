@@ -68,7 +68,11 @@ From the user's message, identify:
 
 1. **Topic / raw material** — What is the post about? (a project, a market observation, a tool comparison, a milestone, a news reaction, a thesis)
 2. **Language** — English by default. Spanish only if: the post is Mexico-specific, the user explicitly asks for Spanish, or the emotional center is in Spanish. Never randomly mix languages mid-post.
-3. **Length / reach intent** — Short milestone (3–6 lines) or full post (200–350 words)? If unclear, default to a full post.
+3. **Length / reach intent** — Short milestone (3–6 lines) or full post? Full-post length is user-selectable from three sizes:
+   - **Short (~200 words)** — default. Tight, single-thesis post.
+   - **Medium (~400 words)** — room for one supporting argument or a short limitations block.
+   - **Long (~600 words)** — full structural argument with multiple paragraphs of evidence.
+   Accept ±15% tolerance around the target. If the user does not specify, use Short (200). Honor explicit user requests ("make it longer", "keep it ~400", etc.).
 4. **User-provided phrasing** — If Alan provides his own phrasing (per his memory pattern: "voice preservation over polish"), preserve it. Correct grammar only. Do not over-edit.
 
 If critical context is missing (e.g., the topic is too vague to land a thesis), ask one sharp question. Do not ask three.
@@ -157,7 +161,7 @@ Apply these formatting rules without exception:
 - **Emojis**: None. Do not use checkmarks, sparkles, fire, charts, or any decorative emoji. (Note: the original voice guide allowed sparing ✅ — but the user preference here is no emojis. Honor the user preference.) Numbered emoji (1️⃣–5️⃣) are also out under this rule; use plain "1.", "2.", etc.
 - **Bold/emphasis**: Avoid. LinkedIn does not render markdown bold natively; if Alan wants emphasis he uses Unicode bold via external generator — do not produce Unicode bold yourself unless explicitly asked.
 - **Hashtags**: 3–12 at the very end. Volume scales with reach intent: Pattern D milestones get 2–4; full Pattern A/B/C posts get 8–12. Use established Alan-relevant tags (see "Hashtag Library" below).
-- **Length**: Pattern D = 3–6 lines. Patterns A/B/C/E = roughly 200–350 words of body before hashtags.
+- **Length**: Pattern D = 3–6 lines. Patterns A/B/C/E follow the user-selected size from Step 1: Short ~200 words (default), Medium ~400, Long ~600 (±15%). Body word count is measured before hashtags. Do not pad to hit the target — if the thesis lands earlier, deliver short.
 
 Voice rules — every paragraph must pass these:
 
@@ -292,7 +296,7 @@ If your draft sounds nothing like these, rewrite.
 - [ ] Hashtag count and selection match pattern
 - [ ] Language choice is intentional and consistent
 - [ ] If the user supplied their own phrasing, it is preserved (grammar corrections only)
-- [ ] Length matches pattern (D = 3–6 lines; A/B/C/E = 200–350 words body)
+- [ ] Length matches pattern and selected size (D = 3–6 lines; A/B/C/E = Short ~200 / Medium ~400 / Long ~600 words body, ±15%)
 - [ ] Reads like Alan — not like a generic LinkedIn content creator
 
 If the draft fails any item, revise before delivering.
@@ -331,6 +335,7 @@ The structure below is the contract. Follow it exactly.
 | Sources to cite | `source_url` fields on `lab_items` and repos — only cite items the user can verify |
 | Week reference | `research_output.meta.week_ref` |
 | Language | `research_output.meta.language` |
+| Post length | `research_output.meta.linkedin_length` — one of `short` (~200 words, default), `medium` (~400), `long` (~600). If absent, use `short`. |
 
 **Pattern D is banned in pipeline mode** — never auto-generate a milestone post from weekly research. The coordinator rejects `pattern_used == "D"`.
 
@@ -356,11 +361,12 @@ Return a single JSON object under the key `linkedin_output`. No chat text. No ma
       "char_count": 0,
       "generated_at": "ISO 8601 UTC",
       "week_ref": "YYYY-WNN",
+      "length_used": "short | medium | long",
       "source_research_actor": "Carried from research_output.narrative.biggest_move.actor"
     },
     "post": {
       "hook": "Single-line opener — one of the four sanctioned hook types.",
-      "body": "Full post body including the hook as its first line. 200-350 words. Paragraphs 1-3 sentences. Generous \\n\\n between paragraphs. No emojis. No markdown bold.",
+      "body": "Full post body including the hook as its first line. Target word count matches the selected length (short ~200 / medium ~400 / long ~600, ±15%). Paragraphs 1-3 sentences. Generous \\n\\n between paragraphs. No emojis. No markdown bold.",
       "hashtags": ["#CamelCase", "#TagsFromHashtagLibrary"],
       "char_count": 0,
       "ready_to_paste": true,
@@ -397,6 +403,7 @@ Return a single JSON object under the key `linkedin_output`. No chat text. No ma
 - [ ] `post.body` contains the hook as its first line
 - [ ] `post.hashtags` has at least 3 items
 - [ ] `post.char_count` is > 0 and ≤ 3000
+- [ ] `post.word_count` within ±15% of the target for `meta.length_used` (200 / 400 / 600)
 - [ ] `meta.pattern_used` is one of A, B, C, E (not D)
 - [ ] `editorial_notes.alan_voice_check` is a meaningful sentence
 - [ ] `editorial_notes.limitations_included` is `true`
