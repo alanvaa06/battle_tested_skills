@@ -317,9 +317,7 @@ In all other cases, take input directly from the user's message and deliver plai
 All input comes from a `research_output` JSON object passed by the coordinator. Do not perform
 additional web research. Do not invent facts not present in the input.
 
-The canonical schemas live in `pipeline/schemas/research_output.schema.json` (input) and
-`pipeline/schemas/linkedin_output.schema.json` (output) in this repo. If you find a conflict between this
-section and the schema files, the schema files win.
+The structure below is the contract. Follow it exactly.
 
 ### Input field mapping — what to read from `research_output`
 
@@ -409,4 +407,3 @@ Return a single JSON object under the key `linkedin_output`. No chat text. No ma
 
 - Return **only** the JSON object. No markdown, no commentary before or after.
 - Do not deliver the plain-text post separately — it lives inside `post.body`.
-- A reference fixture matching this contract lives at `pipeline/fixtures/synthetic/linkedin_output.example.json`.

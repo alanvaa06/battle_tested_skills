@@ -8,7 +8,6 @@ workflow that a sandbox can clone, open, and execute end-to-end.
 ```
 battle_tested_skills/
 ├── routines/             # one folder per routine
-├── tools/                # generic, parameterized helpers shared across routines
 ├── docs/                 # design specs, plans, architecture
 └── README.md             # this file
 ```
@@ -26,35 +25,26 @@ The sandbox prompt is always:
 ```
 Clone github.com/alanvaa06/battle_tested_skills.
 cd routines/<routine-name>.
-Read coordinator.md and execute it.
+Read SCHEDULED_PROMPT.md and execute it.
 ```
 
 The routine's `README.md` documents required environment variables. The
-`coordinator.md` is what Claude actually executes — read it to understand
+`SCHEDULED_PROMPT.md` is what Claude actually executes — read it to understand
 the work, or run it directly.
 
 ## Conventions
 
-- **Per-routine isolation.** Each routine owns its `skills/` and (when
-  applicable) `pipeline/`. Skills are not shared between routines.
-- **Generic plumbing in `tools/`.** HTTP POST, schema validation, payload
-  assembly. Tools take parameters and never hardcode routine-specific
-  field names.
-- **Coordinator is the entry point.** Single file per routine. Claude
-  reads it as a prompt.
-- **Env vars at sandbox spawn.** Secrets and config arrive as environment
-  variables, never committed to the repo.
-- **JSON Schema 2020-12.** All payload contracts live under
-  `routines/<r>/pipeline/schemas/`.
+- **Per-routine isolation.** Each routine owns its `skills/`. Skills are not shared between routines.
+- **Routines are self-contained** — everything they need lives under `routines/<name>/`.
+- **SCHEDULED_PROMPT.md is the entry point.** Single file per routine. Claude reads it as a prompt.
+- **Env vars at sandbox spawn.** Secrets and config arrive as environment variables, never committed to the repo.
 
 ## Adding a new routine
 
 1. `mkdir -p routines/<new-name>/skills`.
-2. Add `coordinator.md` + `README.md`.
-3. If the routine emits a JSON payload, create `pipeline/{schemas,fixtures,tests}`.
-4. Copy any required skills into `routines/<new-name>/skills/` (full
-   copies — no symlinks).
-5. Append a row to the Routine index above.
+2. Add `SCHEDULED_PROMPT.md` + `README.md`.
+3. Include all required skills directly under `routines/<new-name>/skills/`.
+4. Append a row to the Routine index above.
 
 ## Spec + plan
 

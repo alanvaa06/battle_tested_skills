@@ -17,7 +17,7 @@ distribution.
 ```
 Clone github.com/alanvaa06/battle_tested_skills.
 cd routines/weekly-ai-content.
-Read coordinator.md and execute it.
+Read SCHEDULED_PROMPT.md and execute it.
 ```
 
 ## Required environment variables
@@ -33,26 +33,15 @@ Read coordinator.md and execute it.
 
 | Path | Role |
 |---|---|
-| `coordinator.md` | Entry point — Claude reads + executes |
+| `SCHEDULED_PROMPT.md` | Entry point — paste into routine UI |
 | `skills/weekly-ai-research/` | Step 1: research |
 | `skills/email-newsletter-ai/` | Step 2a: newsletter writer |
 | `skills/linkedin-alan-post/` | Step 2b: LinkedIn writer |
-| `pipeline/schemas/` | JSON Schemas for the three sub-payloads + final |
-| `pipeline/fixtures/synthetic/` | Canned examples for offline tests |
-| `pipeline/fixtures/live/` | Last real run (replay/debug) |
-| `pipeline/tests/smoke_test.py` | Offline schema chain test |
-| `pipeline/tests/run_live.py` | End-to-end runner against live fixtures |
 
 ## Running manually
 
-```bash
-# 1. Set env vars
-export WEEKLY_AI_WEBHOOK_URL="https://n8n.alanvaa.cloud/webhook/provex-ai-news-weekly"
-
-# 2. Open coordinator in Claude Code, follow steps.
-# OR just run the offline smoke test:
-python routines/weekly-ai-content/pipeline/tests/smoke_test.py
-```
+The routine runs end-to-end in the Claude Code scheduled remote agent.
+Manual local testing is not part of this simplified setup.
 
 ## Schedule
 

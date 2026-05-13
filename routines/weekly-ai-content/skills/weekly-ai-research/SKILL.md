@@ -191,8 +191,7 @@ JSON object under the key `research_output` with the schema below. This object i
 by the `email-newsletter-ai` and `linkedin-alan-post` skills via the coordinator, then
 assembled into a `final_payload` and POSTed to an n8n webhook.
 
-The canonical schema lives in `pipeline/schemas/research_output.schema.json` in this repo. If you find
-a conflict between this section and the schema file, the schema file wins.
+The structure below is the contract. Follow it exactly.
 
 ### Top-level shape
 
@@ -300,7 +299,6 @@ The coordinator validates these before proceeding. If any fail, it re-prompts on
 
 - Return **only** the JSON object. No markdown, no commentary before or after, no code fence wrapper unless the harness strips it.
 - Do not save a markdown briefing file. The coordinator does not read filesystem outputs in pipeline mode.
-- A reference fixture matching this contract lives at `pipeline/fixtures/synthetic/research_output.example.json`.
 
 ---
 
