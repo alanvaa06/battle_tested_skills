@@ -13,22 +13,51 @@ and go.
 | [`roast-me`](roast-me/) | Coach-mode Socratic challenger that stress-tests an investment thesis, signal logic, backtest, or config. Runs a required quant-guardrail checklist (lookahead, survivorship, leakage, costs, overfitting) and ends with a written red-flag summary plus prioritized next moves. | CFA charterholders, quants, engineers |
 | [`scaffold`](scaffold/) | Agentic project template — a `CLAUDE.md` senior-engineer persona plus a `docs/` context structure (memory, lessons, todo, session-log, PRD, references) for plan-first, self-improving, verification-driven workflows. | Anyone building with Claude Code |
 
-## Install a skill
+## Install
 
-Copy the skill folder into your Claude Code skills directory:
+Clone the repo, then run the installer. It copies every skill folder (any
+folder with a `SKILL.md`) into your Claude Code skills directory.
 
 ```bash
-# Personal (all projects)
-cp -r roast-me ~/.claude/skills/roast-me
-
-# Or per-project
-cp -r roast-me .claude/skills/roast-me
+git clone https://github.com/alanvaa06/battle_tested_skills.git
+cd battle_tested_skills
 ```
 
-Claude discovers the skill from its `SKILL.md` and triggers it from the
-`description`. `scaffold` is a project template — copy its `CLAUDE.md` and
-`docs/` into a new repo root to start a project with the persona and context
-files in place.
+**macOS / Linux**
+
+```bash
+./install.sh                 # → ~/.claude/skills (personal, all projects)
+./install.sh .claude/skills  # → into the current project's skills dir
+```
+
+**Windows (PowerShell)**
+
+```powershell
+./install.ps1                 # → ~\.claude\skills (personal, all projects)
+./install.ps1 .claude\skills  # → into the current project's skills dir
+```
+
+Restart Claude Code (or start a new session) so it picks up the new skill.
+Claude discovers it from `SKILL.md` and triggers it from the `description` —
+e.g. say *"roast my thesis"* to fire `roast-me`.
+
+### Manual install (one skill)
+
+```bash
+cp -r roast-me ~/.claude/skills/roast-me      # personal
+cp -r roast-me .claude/skills/roast-me        # per-project
+```
+
+### scaffold (project template)
+
+`scaffold` is a starter template, not an auto-discovered skill — it has no
+`SKILL.md`. Copy its `CLAUDE.md` and `docs/` into a new project root:
+
+```bash
+cp -r scaffold/. /path/to/your/project/
+```
+
+The installers skip `scaffold` for this reason.
 
 ## Skill anatomy
 
