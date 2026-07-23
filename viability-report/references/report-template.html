@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viabilidad — {{PROYECTO}}</title>
+<style>
+  :root{
+    --verde:#15803d; --ambar:#b45309; --rojo:#b91c1c;
+    --verde-bg:#f0fdf4; --ambar-bg:#fffbeb; --rojo-bg:#fef2f2;
+    --text:#1f2937; --muted:#6b7280; --bg:#f9fafb; --card:#ffffff;
+    --border:#e5e7eb; --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:2rem 1rem;background:var(--bg);color:var(--text);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  main{max-width:60rem;margin:0 auto}
+  h1{font-size:1.6rem;margin:.2rem 0}
+  h2{font-size:1.2rem;margin:2rem 0 .8rem;border-bottom:1px solid var(--border);padding-bottom:.3rem}
+  h3{font-size:1rem;margin:1rem 0 .4rem}
+  .muted{color:var(--muted);font-size:.9rem}
+  .badge{display:inline-block;padding:.35rem 1rem;border-radius:999px;
+    font-weight:700;font-size:1.05rem;color:#fff}
+  .badge.go{background:var(--verde)} .badge.pivot{background:var(--ambar)} .badge.nogo{background:var(--rojo)}
+  .sev{display:inline-block;padding:.05rem .5rem;border-radius:6px;font-size:.78rem;font-weight:600}
+  .sev.fatal{background:var(--rojo-bg);color:var(--rojo);border:1px solid var(--rojo)}
+  .sev.grave{background:var(--ambar-bg);color:var(--ambar);border:1px solid var(--ambar)}
+  .sev.menor{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.8rem}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem}
+  .card.verde{border-left:5px solid var(--verde)}
+  .card.ambar{border-left:5px solid var(--ambar)}
+  .card.rojo{border-left:5px solid var(--rojo)}
+  table{border-collapse:collapse;width:100%;margin:.6rem 0;background:var(--card);font-size:.92rem}
+  th,td{border:1px solid var(--border);padding:.45rem .6rem;text-align:left;vertical-align:top}
+  th{background:var(--bg)}
+  details{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    margin:.6rem 0;padding:.2rem .9rem}
+  summary{cursor:pointer;font-weight:600;padding:.5rem 0}
+  blockquote{border-left:3px solid var(--border);margin:.4rem 0;padding:.1rem .8rem;color:var(--muted)}
+  .toolbar{margin:1rem 0}
+  .toolbar button{font:inherit;padding:.3rem .8rem;border:1px solid var(--border);
+    border-radius:6px;background:var(--card);cursor:pointer;margin-right:.5rem}
+  a{color:#1d4ed8}
+  footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);
+    font-size:.85rem;color:var(--muted)}
+  @media print{
+    body{background:#fff;padding:0}
+    .toolbar{display:none}
+    details{border:none;padding:0}
+    details>summary{list-style:none}
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="muted">Reporte de viabilidad — {{FECHA}}</p>
+    <h1>{{PROYECTO}}</h1>
+    <p><span class="badge {{VEREDICTO_CLASE}}">{{VEREDICTO}}</span></p>
+    <p>{{RAZON_DOMINANTE}}</p>
+  </header>
+
+  <div class="toolbar">
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expandir todo</button>
+    <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Colapsar todo</button>
+  </div>
+
+  <h2>Tablero por segmento</h2>
+  <div class="cards">{{TABLERO_CARDS}}</div>
+
+  <h2>Tesis (steelman confirmado)</h2>
+  {{TESIS}}
+
+  <h2>Hallazgos por segmento</h2>
+  {{HALLAZGOS_SECCIONES}}
+
+  <h2>Contradicciones no resueltas</h2>
+  {{CONTRADICCIONES}}
+
+  <h2>Gaps de documentación</h2>
+  {{GAPS}}
+
+  <h2>Modelo financiero</h2>
+  {{FINMODEL_SECCION}}
+
+  <h2>Mercado</h2>
+  {{MERCADO_SECCION}}
+
+  <h2>Qué cambiaría el veredicto</h2>
+  {{CAMBIARIA_VEREDICTO}}
+
+  <h2>Anexos — documentos fuente</h2>
+  {{ANEXOS}}
+
+  <footer>{{TRAZABILIDAD}}</footer>
+</main>
+<script>
+  // Al imprimir, expandir todo (los colapsados no se imprimen si no).
+  window.addEventListener('beforeprint',
+    ()=>document.querySelectorAll('details').forEach(d=>d.open=true));
+</script>
+</body>
+</html>
