@@ -11,6 +11,18 @@ al founder; no rellenes con conocimiento propio.
 
 Orden de bloques: 00 → 01 → 02 → 06 → 07 → hipótesis (04/05).
 
+## Cosecha de recursos (si hay recursos extra)
+
+- Por sección pendiente, busca en los recursos una respuesta candidata que
+  cumpla el criterio de suficiencia de esa sección. Si no lo cumple, la
+  sección se pregunta normal — no bajes el estándar por tener fuente.
+- Presenta candidatos por doc, en bloque: `sección → contenido propuesto →
+  fuente`. El founder confirma, corrige o rechaza cada uno.
+- Jerarquía de evidencia: código de prototipo (lo que EXISTE) > docs de
+  research previo > notas sueltas > memoria del founder.
+- Nunca mezcles cosecha con invención: si el recurso no lo dice, no es
+  candidato.
+
 ## Bloque 00 — Tesis
 
 ### La apuesta
