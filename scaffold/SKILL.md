@@ -1,6 +1,6 @@
 ---
 name: scaffold
-description: Verify or create a project's context system — a docs/context/ working memory (memory, lessons, todo, results, sesion-log), a CLAUDE.md that reads it ON DEMAND (never bulk), hard size caps enforced by a UserPromptSubmit hook + /compact-context command, state-capture hooks (SubagentStop, SessionEnd, PreCompact), companion skills (python-standards, agent-design, excel-standards), and a project-specific system persona. Idempotent: brings a project up to the convention and no-ops if it already conforms. Use whenever the user says "scaffold", "set up the context system", "add the docs/context convention", "wire up the caps hook", "initialize CLAUDE.md", or starts work in a repo that has no docs/context/ or a CLAUDE.md missing the on-demand-read convention.
+description: Verify or create a project's context system — a docs/context/ working memory (memory, lessons, todo, results, sesion-log), a CLAUDE.md that reads it ON DEMAND (never bulk), hard size caps enforced by a UserPromptSubmit hook + /compact-context command, state-capture hooks (SubagentStop, SessionEnd, PreCompact), companion skills (python-standards, excel-standards), and a project-specific system persona. Idempotent: brings a project up to the convention and no-ops if it already conforms. Use whenever the user says "scaffold", "set up the context system", "add the docs/context convention", "wire up the caps hook", "initialize CLAUDE.md", or starts work in a repo that has no docs/context/ or a CLAUDE.md missing the on-demand-read convention.
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Idempotent. Brings the current project up to the **context-system convention** and changes nothing if it already conforms. Run it on a fresh repo to set everything up, or on an existing one to check and fill only the gaps.
 
-The convention has one core idea: `docs/context/` is durable working memory that is read **on demand**, not bulk-loaded every turn, and is kept small by **hard caps** that a hook watches and a `/compact-context` command enforces. State-capture hooks make the memory survive what the model forgets: `SubagentStop` appends each subagent's final line to `results.md`, `SessionEnd` stubs `sesion-log.md` when no entry was written, `PreCompact` marks compaction points. CLAUDE.md teaches the project's Claude to use it all under a project-specific persona. Coding/design standards live in companion **skills** (`python-standards`, `agent-design`, `excel-standards`), not in CLAUDE.md prose — skill descriptions trigger structurally; CLAUDE.md read-this-file instructions degrade over long sessions.
+The convention has one core idea: `docs/context/` is durable working memory that is read **on demand**, not bulk-loaded every turn, and is kept small by **hard caps** that a hook watches and a `/compact-context` command enforces. State-capture hooks make the memory survive what the model forgets: `SubagentStop` appends each subagent's final line to `results.md`, `SessionEnd` stubs `sesion-log.md` when no entry was written, `PreCompact` marks compaction points. CLAUDE.md teaches the project's Claude to use it all under a project-specific persona. Coding/design standards live in companion **skills** (`python-standards`, `excel-standards`), not in CLAUDE.md prose; agent work is covered by the agent-cycle plugin — skill descriptions trigger structurally; CLAUDE.md read-this-file instructions degrade over long sessions.
 
 Templates live in `./templates/` next to this SKILL.md (resolve relative to the skill's own directory). Treat them as source — DO NOT modify them; copy out of them.
 
@@ -32,7 +32,7 @@ Two traps in one payload:
 - `agent_id` **is** populated, so gating on "any identity field" still logs ordinary turns. Only a non-empty **`agent_type`** distinguishes a real subagent.
 - `last_assistant_message` carries the **user's** text, so the logged line looks like a transcript leak, not agent output.
 
-The original template did `if ($data.agent_type) { … } else { 'subagent' }`. That `else` turned missing identity into a plausible value, so the script never got to ask whether a subagent had run — it just wrote. Across five projects this accumulated 44 junk lines before anyone noticed. When auditing, a `subagent-capture.ps1` that lacks the non-empty-`agent_type` gate is **non-conforming**, and `results.md` lines matching `subagent subagent:` are contamination, not history.
+The original template did `if ($data.agent_type) { … } else { 'subagent' }`. That `else` turned missing identity into a plausible value, so the script never got to ask whether a subagent had run — it just wrote. One project accumulated 23 junk lines before anyone noticed. When auditing, a `subagent-capture.ps1` that lacks the non-empty-`agent_type` gate is **non-conforming**, and `results.md` lines matching `subagent subagent:` are contamination, not history.
 
 Corollary for any hook added later: write UTF-8 explicitly (`[System.IO.File]::AppendAllText` with `UTF8Encoding`), because `Add-Content` defaults to ANSI and mangles accented text into `implementaci??n`.
 
@@ -51,7 +51,6 @@ templates/
     commands/compact-context.md   # /compact-context — snapshot + hard-compact
   skills/
     python-standards/             # fallback copies — install ONLY if not in ~/.claude/skills/
-    agent-design/
     excel-standards/              # domain: Excel/financial-model work
   docs/
     context/{memory,lessons,todo,results,sesion-log}.md
@@ -74,7 +73,7 @@ A project conforms when ALL of these hold. Use this same list to audit (Step 1) 
    - `results.md` contains no lines matching `subagent subagent:` — those are contamination from the buggy gate, not history. Lines with a real agent name (`subagent Explore:`, `subagent general-purpose:`) are genuine and must be preserved.
 5. `.claude/commands/compact-context.md` exists.
 6. `.claude/settings.json` registers all four hook events (`UserPromptSubmit`, `SubagentStop`, `SessionEnd`, `PreCompact`) with commands referencing the scripts above.
-7. Skills `python-standards`, `agent-design`, and `excel-standards` are available: present in `~/.claude/skills/` (preferred) **or** in the project's `.claude/skills/`. Global presence satisfies this — do NOT also install project copies (double registration = duplicate triggering).
+7. Skills `python-standards` and `excel-standards` are available: present in `~/.claude/skills/` (preferred) **or** in the project's `.claude/skills/`. Global presence satisfies this — do NOT also install project copies (double registration = duplicate triggering).
 
 Note the deliberate spelling `sesion-log.md` (one `s`) — the hooks key on that exact name, so don't "correct" it.
 
@@ -147,7 +146,7 @@ Respect the caps — keep prefill well under each file's budget.
 
 ## Step 5 — Migrate legacy references (existing projects only)
 
-If the project has `docs/references/python_best_practices.md` or `docs/references/agent-design-best-practices.md` (pre-skill convention), tell the user those are superseded by the `python-standards` / `agent-design` skills and offer to delete them. Any CLAUDE.md line instructing "read docs/references/<those files>" is non-conforming — remove it during the Step 3 merge (the References & Skills section replaces it). Project-specific references stay.
+If the project has `docs/references/python_best_practices.md` or `docs/references/agent-design-best-practices.md` (pre-skill convention), tell the user those are superseded by the `python-standards` skill and the agent-cycle plugin and offer to delete them. Any CLAUDE.md line instructing "read docs/references/<those files>" is non-conforming — remove it during the Step 3 merge (the References & Skills section replaces it). Project-specific references stay.
 
 ## Step 6 — Verify + report
 

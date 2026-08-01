@@ -59,7 +59,7 @@
 
 ## References & Skills
 
-- Coding and design standards live in global skills, not in this file: `python-standards` fires on any Python work, `agent-design` on any agent/pipeline/orchestration work. Follow them when they trigger.
+- Coding and design standards live in global skills, not in this file: `python-standards` fires on any Python work; agent/pipeline work is covered by the agent-cycle plugin's skills. Follow them when they trigger.
 - `docs/references/` holds **project-specific** reference material only (domain specs, API notes). Read on demand when the task touches that domain.
 - Product requirement docs live in `docs/prd/` as `NNN-feature-name.md`.
 
