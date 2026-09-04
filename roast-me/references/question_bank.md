@@ -55,7 +55,7 @@ Each section is graded by depth:
 
 **L1 — Frame**
 - Walk me through the formula for each signal in plain English, then in code.
-- What does each input represent, and where is it coming from in the data curator?
+- What does each input represent, and where is it coming from in your data pipeline?
 - How is the signal turned into a portfolio decision — ranked, thresholded, scored?
 
 **L2 — Probe**
@@ -143,18 +143,18 @@ Each section is graded by depth:
 
 **L1 — Frame**
 - Can you regenerate the exact backtest equity curve from a clean clone, with seeds fixed?
-- Are universe, signal, and rebalance parameters in `Config/*.xlsx`, or in code?
-- Is the lockfile committed?
+- Are universe, signal, and rebalance parameters in named configuration, or hardcoded in source?
+- Are dependencies pinned (lockfile, environment spec) and committed?
 
 **L2 — Probe**
-- If a teammate pulls main and runs `run_backtest_engine.py` today, do they get the same numbers as in the latest memo? If not, what is the source of drift?
-- Have any decisions been made that aren't logged in `docs/context/memory.md`?
-- Is there a logged rule in `docs/context/lessons.md` for every error or course-correction made this session?
+- If a teammate checks out your latest code and re-runs the backtest today, do they get the same numbers as in the latest memo? If not, what is the source of drift?
+- Have any decisions been made that aren't logged anywhere — a decision log, commit history, or notebook?
+- Is there a written lesson captured for every error or course-correction made this session?
 - Where does the user document the *one change* between this run and the previous one?
 
 **L3 — Stress**
 - If you discovered a bug today that retroactively invalidates a parameter choice from two weeks ago, what is the procedure for tracing what else depends on that choice?
-- Are the data curator outputs versioned? Can you reproduce yesterday's signal if today's data vendor pull replaces a value?
+- Are your pipeline outputs versioned? Can you reproduce yesterday's signal if today's data vendor pull replaces a value?
 
 ---
 

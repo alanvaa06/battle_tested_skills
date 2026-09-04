@@ -1,0 +1,76 @@
+# battle_tested_skills
+
+Open-source [Claude Code](https://claude.com/claude-code) skills for the
+**CFA / quant community** — battle-tested helpers for investment research,
+strategy stress-testing, and disciplined agentic engineering. Each skill is
+self-contained: clone it, drop it into your Claude Code `skills/` directory,
+and go.
+
+## Skills
+
+| Skill | What it does | Audience |
+|---|---|---|
+| [`roast-me`](roast-me/) | Coach-mode Socratic challenger that stress-tests an investment thesis, signal logic, backtest, or config. Runs a required quant-guardrail checklist (lookahead, survivorship, leakage, costs, overfitting) and ends with a written red-flag summary plus prioritized next moves. | CFA charterholders, quants, engineers |
+| [`scaffold`](scaffold/) | Agentic project template — a `CLAUDE.md` senior-engineer persona plus a `docs/` context structure (memory, lessons, todo, session-log, PRD, references) for plan-first, self-improving, verification-driven workflows. | Anyone building with Claude Code |
+
+## Install
+
+Clone the repo, then run the installer. It copies every skill folder (any
+folder with a `SKILL.md`) into your Claude Code skills directory.
+
+```bash
+git clone https://github.com/alanvaa06/battle_tested_skills.git
+cd battle_tested_skills
+```
+
+**macOS / Linux**
+
+```bash
+./install.sh                 # → ~/.claude/skills (personal, all projects)
+./install.sh .claude/skills  # → into the current project's skills dir
+```
+
+**Windows (PowerShell)**
+
+```powershell
+./install.ps1                 # → ~\.claude\skills (personal, all projects)
+./install.ps1 .claude\skills  # → into the current project's skills dir
+```
+
+Restart Claude Code (or start a new session) so it picks up the new skill.
+Claude discovers it from `SKILL.md` and triggers it from the `description` —
+e.g. say *"roast my thesis"* to fire `roast-me`.
+
+### Manual install (one skill)
+
+```bash
+cp -r roast-me ~/.claude/skills/roast-me      # personal
+cp -r roast-me .claude/skills/roast-me        # per-project
+```
+
+### scaffold (project template)
+
+`scaffold` is a starter template, not an auto-discovered skill — it has no
+`SKILL.md`. Copy its `CLAUDE.md` and `docs/` into a new project root:
+
+```bash
+cp -r scaffold/. /path/to/your/project/
+```
+
+The installers skip `scaffold` for this reason.
+
+## Skill anatomy
+
+```
+<skill-name>/
+├── SKILL.md          # name + description frontmatter, then instructions
+└── references/       # optional deeper material loaded on demand
+```
+
+## Contributing
+
+This is a community container — PRs adding or improving skills are welcome.
+Keep each skill self-contained, give it a clear trigger `description`, and add
+a row to the Skills table above.
+
+> Nothing here is investment advice.
