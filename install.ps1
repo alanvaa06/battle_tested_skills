@@ -6,8 +6,7 @@
 #   ./install.ps1 C:\custom\path       # install anywhere
 #
 # Any top-level folder containing a SKILL.md is treated as a skill and copied
-# in (overwriting an existing copy of the same name). The 'scaffold' template
-# has no SKILL.md and is skipped — see the note printed at the end.
+# in (overwriting an existing copy of the same name).
 param([string]$Dest = "$HOME\.claude\skills")
 
 $ErrorActionPreference = "Stop"
@@ -26,6 +25,3 @@ Get-ChildItem -Path $Src -Directory | ForEach-Object {
 }
 
 Write-Host "done. $installed skill(s) installed."
-Write-Host ""
-Write-Host "note: 'scaffold' is a project template, not a skill. Copy it into a project root:"
-Write-Host "  Copy-Item -Recurse `"$Src\scaffold\*`" C:\path\to\your\project\"

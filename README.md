@@ -11,7 +11,8 @@ and go.
 | Skill | What it does | Audience |
 |---|---|---|
 | [`roast-me`](roast-me/) | Coach-mode Socratic challenger that stress-tests an investment thesis, signal logic, backtest, or config. Runs a required quant-guardrail checklist (lookahead, survivorship, leakage, costs, overfitting) and ends with a written red-flag summary plus prioritized next moves. | CFA charterholders, quants, engineers |
-| [`scaffold`](scaffold/) | Agentic project template — a `CLAUDE.md` senior-engineer persona plus a `docs/` context structure (memory, lessons, todo, session-log, PRD, references) for plan-first, self-improving, verification-driven workflows. | Anyone building with Claude Code |
+| [`scaffold`](scaffold/) | Verifies or creates a project's context system — `docs/context/` working memory (memory, lessons, todo, results, session log), a `CLAUDE.md` that reads it on demand, size caps enforced by a hook plus `/compact-context`, state-capture hooks, and companion skills (`python-standards`, `excel-standards`). Idempotent. | Anyone building with Claude Code |
+| [`map-project-architecture`](map-project-architecture/) | Maps a Python or TypeScript repo into one evidence-backed HTML architecture page — import layers, contracts, storage, external connections, user flow, infra. Every claim carries a `file:line` from `scripts/inventory.py`; a lens with no evidence says so instead of guessing. Published as an Artifact. | Engineers onboarding onto a codebase |
 
 ## Install
 
@@ -48,23 +49,21 @@ cp -r roast-me ~/.claude/skills/roast-me      # personal
 cp -r roast-me .claude/skills/roast-me        # per-project
 ```
 
-### scaffold (project template)
+### scaffold and map-project-architecture
 
-`scaffold` is a starter template, not an auto-discovered skill — it has no
-`SKILL.md`. Copy its `CLAUDE.md` and `docs/` into a new project root:
-
-```bash
-cp -r scaffold/. /path/to/your/project/
-```
-
-The installers skip `scaffold` for this reason.
+Both are regular skills with a `SKILL.md`, so the installers pick them up.
+`scaffold` ships its project files under `scaffold/templates/` and copies them
+into a project when invoked; `map-project-architecture` ships its inventory
+scripts and tests under `map-project-architecture/scripts/`.
 
 ## Skill anatomy
 
 ```
 <skill-name>/
 ├── SKILL.md          # name + description frontmatter, then instructions
-└── references/       # optional deeper material loaded on demand
+├── references/       # optional deeper material loaded on demand
+├── templates/        # optional files the skill copies into a project
+└── scripts/          # optional helper scripts the skill runs
 ```
 
 ## Contributing

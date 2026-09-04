@@ -7,8 +7,7 @@
 #   ./install.sh /custom/path    # install anywhere
 #
 # Any top-level folder containing a SKILL.md is treated as a skill and copied
-# in (overwriting an existing copy of the same name). The 'scaffold' template
-# has no SKILL.md and is skipped — see the note printed at the end.
+# in (overwriting an existing copy of the same name).
 set -euo pipefail
 
 DEST="${1:-$HOME/.claude/skills}"
@@ -28,6 +27,3 @@ for dir in "$SRC"/*/; do
 done
 
 echo "done. $installed skill(s) installed."
-echo
-echo "note: 'scaffold' is a project template, not a skill. Copy it into a project root:"
-echo "  cp -r \"$SRC/scaffold/.\" /path/to/your/project/"
