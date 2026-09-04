@@ -49,13 +49,12 @@ templates/
       session-end-log.ps1         # SessionEnd — date stub in sesion-log.md if no entry today
       precompact-log.ps1          # PreCompact — compaction marker in sesion-log.md
     commands/compact-context.md   # /compact-context — snapshot + hard-compact
-  skills/
-    python-standards/             # fallback copies — install ONLY if not in ~/.claude/skills/
-    excel-standards/              # domain: Excel/financial-model work
   docs/
     context/{memory,lessons,todo,results,sesion-log}.md
     prd/README.md
 ```
+
+The companion skills `python-standards` and `excel-standards` are not templates: they live as sibling skills next to this one (`../python-standards/`, `../excel-standards/`, resolved relative to this SKILL.md) and are installed globally by the repo's installer.
 
 ## What "compliant" means — the checklist
 
@@ -111,7 +110,7 @@ For each item the audit marked `missing`, copy it from `templates/` to the same 
 - `{{PROJECT_NAME}}` → the repo/working-dir name.
 - `{{SYSTEM_PERSONA}}` → the Step 2 persona text.
 
-**Skills (checklist item 7) are the exception to "same relative path":** if a skill is missing both globally and in the project, copy `templates/skills/<name>/` to the **project's** `.claude/skills/<name>/`. If it exists globally, do nothing — never create a project copy alongside a global one.
+**Skills (checklist item 7) are the exception to "same relative path":** if a skill is missing both globally and in the project, copy the sibling skill `../<name>/` to the **project's** `.claude/skills/<name>/`. If it exists globally, do nothing — never create a project copy alongside a global one.
 
 For items the audit marked **`non-conforming`** (the file exists but is wrong — e.g. a CLAUDE.md with no on-demand rule, a CLAUDE.md that hardcodes cap values, or `settings.json` with other hooks but not these), do NOT silently overwrite. Ask:
 

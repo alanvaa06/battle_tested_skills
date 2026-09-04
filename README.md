@@ -12,6 +12,8 @@ and go.
 |---|---|---|
 | [`roast-me`](roast-me/) | Coach-mode Socratic challenger that stress-tests an investment thesis, signal logic, backtest, or config. Runs a required quant-guardrail checklist (lookahead, survivorship, leakage, costs, overfitting) and ends with a written red-flag summary plus prioritized next moves. | CFA charterholders, quants, engineers |
 | [`scaffold`](scaffold/) | Verifies or creates a project's context system — `docs/context/` working memory (memory, lessons, todo, results, session log), a `CLAUDE.md` that reads it on demand, size caps enforced by a hook plus `/compact-context`, state-capture hooks, and companion skills (`python-standards`, `excel-standards`). Idempotent. | Anyone building with Claude Code |
+| [`excel-standards`](excel-standards/) | Financial-model discipline, CFI-based: inputs/calcs/outputs separation, blue/black/green font convention, one formula per row, balance-sheet and cash-flow tie-outs, scenario switches, sensitivities. Fires on any `.xlsx` model work; pairs with the `xlsx` skill, which does the file mechanics. | CFA charterholders, analysts, quants |
+| [`python-standards`](python-standards/) | Python coding bar: enums, frozen dataclasses, Protocols, dependency injection, composition, mandatory type hints, pytest plus Hypothesis and mutation testing, with a mechanical verification per rule. Fires on any Python work. | Engineers, quants |
 | [`map-project-architecture`](map-project-architecture/) | Maps a Python or TypeScript repo into one evidence-backed HTML architecture page — import layers, contracts, storage, external connections, user flow, infra. Every claim carries a `file:line` from `scripts/inventory.py`; a lens with no evidence says so instead of guessing. Published as an Artifact. | Engineers onboarding onto a codebase |
 
 ## Install
@@ -53,7 +55,8 @@ cp -r roast-me .claude/skills/roast-me        # per-project
 
 Both are regular skills with a `SKILL.md`, so the installers pick them up.
 `scaffold` ships its project files under `scaffold/templates/` and copies them
-into a project when invoked; `map-project-architecture` ships its inventory
+into a project when invoked (its companion skills `python-standards` and
+`excel-standards` are top-level skills here, installed by the same installer); `map-project-architecture` ships its inventory
 scripts and tests under `map-project-architecture/scripts/`.
 
 ## Skill anatomy
