@@ -78,16 +78,9 @@ These are the difference between a model you trust and one you hope is right.
 - Never delete columns mid-model; insert new ones at the end of the time series.
 - Document every non-obvious assumption with a cell comment or a footnote row.
 
-## Shortcuts to default to
-Keyboard-only navigation and formatting is faster and more precise than the mouse:
-- F2 edit, F4 toggle reference, F9 calc, Ctrl+arrow navigate, Ctrl+Shift+arrow select, Alt+= autosum.
-- Alt+E,S,V paste special values; Alt+H,O,I autofit column.
-- Ctrl+1 format cells; Ctrl+; date; Ctrl+Shift+L filter.
-
-## When you build or edit a model
-Run this sequence before calling a model done:
-1. Confirm purpose, audience, and time horizon before building.
-2. State assumptions explicitly and place them in a single inputs block.
-3. Show the formula logic in plain English next to each calculation block.
-4. Run the balance-sheet check and cash-flow tie-out before delivering.
-5. Provide a one-tab executive summary with the 3-5 outputs that matter.
+## Before calling a model done
+- Purpose, audience, and time horizon were confirmed before building.
+- Assumptions are stated explicitly and live in a single inputs block.
+- Each calculation block has its formula logic in plain English next to it.
+- The balance-sheet check and cash-flow tie-out pass.
+- A one-tab executive summary shows the 3-5 outputs that matter.
