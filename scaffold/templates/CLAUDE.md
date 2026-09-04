@@ -15,38 +15,26 @@
 
 ## Workflow Orchestration
 
-### 1. Plan Mode Default
-- Enter plan mode for **ANY** non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, **STOP** and re-plan immediately — don't keep pushing
-- Use plan mode for verification steps, not just building
-- Write detailed specs upfront to reduce ambiguity
+### 1. Plan mode
+- Use plan mode when a task involves an architectural decision, or when the user should approve the approach before files change. When you have enough information to act, act: don't re-derive settled facts or narrate options you won't pursue.
+- If the approach stops working, stop and re-plan instead of pushing on.
 
-### 2. Subagent Strategy
-- Use subagents liberally to keep main context window clean
-- Offload research, exploration, and parallel analysis to subagents
-- One task per subagent for focused execution
+### 2. Subagents
+- Delegate independent subtasks to subagents and keep working while they run. Intervene if a subagent goes off track or is missing context.
 - **Subagents don't inherit the conversation.** When dispatching one, paste the relevant lines from `memory.md`/`lessons.md` into its prompt — it can't know decisions it never saw.
 - A `SubagentStop` hook auto-appends each subagent's final line to `results.md`; distill anything load-bearing into `memory.md` yourself.
 
-### 3. Self-Improvement Loop
-- After **ANY** correction from the user: update `docs/context/lessons.md` with the pattern
-- Write rules for yourself that prevent the same mistake
-- Ruthlessly iterate on these lessons until mistake rate drops
+### 3. Lessons
+- After a correction from the user, record the pattern in `docs/context/lessons.md` (format under Task Management). Don't save what the repo or git history already records; update an existing line rather than adding a near-duplicate; delete a lesson that turns out to be wrong.
 
-### 4. Verification Before Done
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
+### 4. Verification before done
+- Prove a task works before reporting it done: run the tests, check the logs, diff behavior against main when relevant.
+- Before reporting progress, audit each claim against a tool result from this session. Report only work you can point to evidence for; if something isn't verified, say so. If tests fail, say so with the output; if a step was skipped, say that.
 
-### 5. Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes — don't over-engineer
-
-### 6. Autonomous Bug Fixing
-- When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests — then resolve them
+### 5. Scope
+- When the user is describing a problem, asking a question, or thinking out loud rather than requesting a change, the deliverable is your assessment: report findings and stop. Don't apply a fix until asked.
+- When given a bug report with a clear ask, fix it: point at logs, errors, failing tests, then resolve them. Stop only for destructive actions or genuine scope changes the user must decide.
+- Before running a command that changes system state (restarts, deletes, config edits), check that the evidence supports that specific action.
 
 ## Task Management
 
@@ -59,12 +47,13 @@
 
 ## References & Skills
 
-- Coding and design standards live in global skills, not in this file: `python-standards` fires on any Python work; agent/pipeline work is covered by the agent-cycle plugin's skills. Follow them when they trigger.
+- Coding and design standards live in global skills, not in this file. Follow them when they trigger.
 - `docs/references/` holds **project-specific** reference material only (domain specs, API notes). Read on demand when the task touches that domain.
 - Product requirement docs live in `docs/prd/` as `NNN-feature-name.md`.
 
 ## Core Principles
 
-* **Simplicity First**: Make every change as simple as possible. Touch minimal code.
-* **No Laziness**: Find root causes. No temporary fixes. Senior standards.
-* **Minimal Impact**: Changes touch only what's necessary. Don't introduce new bugs.
+- Don't add features, refactor, or introduce abstractions beyond what the task requires. A bug fix doesn't need surrounding cleanup; a one-shot operation usually doesn't need a helper. Do the simplest thing that works well.
+- Find root causes. No temporary fixes that mask a symptom.
+- Validate at system boundaries (user input, external APIs); trust internal code and framework guarantees. Don't add error handling for scenarios that cannot happen.
+- A pre-existing bug or cleanup the task doesn't cover is a follow-up to report in your summary, not a change to make in this one.

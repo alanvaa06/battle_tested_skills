@@ -13,5 +13,5 @@ $file = Join-Path $root 'docs\context\sesion-log.md'
 if (-not (Test-Path $file)) { exit 0 }
 
 $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
-Add-Content -Path $file -Value "- [$stamp]: context compaction (details before this point may be summarized)"
+[System.IO.File]::AppendAllText($file, "- [$stamp]: context compaction (details before this point may be summarized)" + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
 exit 0

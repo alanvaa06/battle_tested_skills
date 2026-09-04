@@ -17,5 +17,5 @@ $date = Get-Date -Format 'yyyy-MM-dd'
 if (Select-String -Path $file -Pattern ("\[" + $date) -Quiet) { exit 0 }
 
 $reason = if ($data.reason) { $data.reason } else { 'unknown' }
-Add-Content -Path $file -Value "- [$date]: session end ($reason) (auto-stub - no model entry today)"
+[System.IO.File]::AppendAllText($file, "- [$date]: session end ($reason) (auto-stub - no model entry today)" + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
 exit 0

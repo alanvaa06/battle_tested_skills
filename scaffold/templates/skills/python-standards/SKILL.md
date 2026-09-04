@@ -58,14 +58,6 @@ Operating rules for all Python code. Each section ends with a **Verification** â
 - Focus: testing the tests â€” the suite should detect logic changes.
 - **Verification**: Introduce a small bug (mutate code); the test suite must fail.
 
-## Readability and intent
-- PEP 8 compliant. Meaningful names that imply type (e.g. `user_count`, not `x`).
-- Robustness = communicating intent. Code must run without syntax errors.
-
-## Built-in types
-- Use explicit assignment to show type (e.g. `x = 5  # int`). Prefer `type()` in prints only when demonstrating.
-- Know mutable (list, dict) vs immutable (tuple, str) and how references work.
-
 ## Type annotations (PEP 484)
 - **Mandatory**: type hints on function arguments and return values.
   - `def greet(name: str) -> str:`
@@ -73,12 +65,12 @@ Operating rules for all Python code. Each section ends with a **Verification** â
 - **Verification**: Run `mypy`; fix any type mismatch errors.
 
 ## Constraining types
-- Use `Optional[T]` (not `Union[T, None]`). Use `Union` and `Literal` where needed. Use `Any` sparingly.
+- Use `T | None` and `A | B` (PEP 604, Python 3.10+); `Optional`/`Union` only on older interpreters. Use `Literal` where needed. Use `Any` sparingly.
 - Explicitly handle `None`: unwrap or check before use. Avoid `Any`; it weakens type checking.
 - **Verification**: Every `Optional` is checked/unwrapped before use.
 
 ## Collections
-- Annotate inner types: `list[int]`, `dict[str, int]` (or `List`, `Dict` from `typing` on older Python). Never raw `list`/`dict` in annotations.
+- Annotate inner types: `list[int]`, `dict[str, int]`. Never raw `list`/`dict` in annotations.
 - Prefer abstract types for parameters: `Iterable` or `Sequence` for read-only inputs.
 - **Verification**: Iteration matches the annotated element type.
 

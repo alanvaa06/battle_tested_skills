@@ -10,7 +10,7 @@ Idempotent. Brings the current project up to the **context-system convention** a
 
 The convention has one core idea: `docs/context/` is durable working memory that is read **on demand**, not bulk-loaded every turn, and is kept small by **hard caps** that a hook watches and a `/compact-context` command enforces. State-capture hooks make the memory survive what the model forgets: `SubagentStop` appends each subagent's final line to `results.md`, `SessionEnd` stubs `sesion-log.md` when no entry was written, `PreCompact` marks compaction points. CLAUDE.md teaches the project's Claude to use it all under a project-specific persona. Coding/design standards live in companion **skills** (`python-standards`, `excel-standards`), not in CLAUDE.md prose; agent work is covered by the agent-cycle plugin — skill descriptions trigger structurally; CLAUDE.md read-this-file instructions degrade over long sessions.
 
-Templates live in `./templates/` next to this SKILL.md (resolve relative to the skill's own directory). Treat them as source — DO NOT modify them; copy out of them.
+Templates live in `./templates/` next to this SKILL.md (resolve relative to the skill's own directory). They are source: copy from them, and make edits in the copy, never in the template.
 
 **Cap values have ONE source of truth: `.claude/hooks/context-size-check.ps1` (`$caps` table).** CLAUDE.md and `/compact-context` point at it instead of restating numbers — when auditing, flag any file that hardcodes cap values elsewhere as non-conforming (drift hazard).
 
@@ -32,7 +32,7 @@ Two traps in one payload:
 - `agent_id` **is** populated, so gating on "any identity field" still logs ordinary turns. Only a non-empty **`agent_type`** distinguishes a real subagent.
 - `last_assistant_message` carries the **user's** text, so the logged line looks like a transcript leak, not agent output.
 
-The original template did `if ($data.agent_type) { … } else { 'subagent' }`. That `else` turned missing identity into a plausible value, so the script never got to ask whether a subagent had run — it just wrote. One project accumulated 23 junk lines before anyone noticed. When auditing, a `subagent-capture.ps1` that lacks the non-empty-`agent_type` gate is **non-conforming**, and `results.md` lines matching `subagent subagent:` are contamination, not history.
+A gate that substitutes a default name for a missing `agent_type` writes on every turn. When auditing, a `subagent-capture.ps1` that lacks the non-empty-`agent_type` gate is **non-conforming**, and `results.md` lines matching `subagent subagent:` are contamination, not history.
 
 Corollary for any hook added later: write UTF-8 explicitly (`[System.IO.File]::AppendAllText` with `UTF8Encoding`), because `Add-Content` defaults to ANSI and mangles accented text into `implementaci??n`.
 
@@ -66,7 +66,7 @@ A project conforms when ALL of these hold. Use this same list to audit (Step 1) 
    - the string `read ON DEMAND` (the on-demand context rule),
    - a `## Task Management` section,
    - the string `HARD CAPS` (the caps rule — pointing at the hook, NOT restating values),
-   - a `## Workflow Orchestration` section (plan mode, subagent strategy incl. the paste-context rule, self-improvement loop).
+   - a `## Workflow Orchestration` section (plan mode, subagents incl. the paste-context rule, lessons, verification, scope).
 3. `CLAUDE.md` has a non-empty `## System Persona` section (default or custom both count).
 4. All four hook scripts exist under `.claude/hooks/`: `context-size-check.ps1`, `subagent-capture.ps1`, `session-end-log.ps1`, `precompact-log.ps1`.
    - `subagent-capture.ps1` gates on a **non-empty `agent_type`** and exits otherwise (see *Hook contract* above). A copy that falls back to a default agent name, or that accepts `agent_id` as identity, is **non-conforming** — it logs ordinary turns.
@@ -123,7 +123,7 @@ Found existing <path>, non-conforming. Options:
 Choice? (default: keep)
 ```
 
-- **CLAUDE.md merge** = insert the missing sections (on-demand rule, Workflow Orchestration, Task Management, caps-pointer) without disturbing the user's existing persona/content; replace any hardcoded caps table with the pointer to the hook.
+- **CLAUDE.md merge** = insert the missing sections (on-demand rule, Workflow Orchestration, Task Management, caps-pointer) without disturbing the user's existing persona/content; replace any hardcoded caps table with the pointer to the hook. Drop skill names from prose: a named skill that is later removed leaves a dangling instruction.
 - **settings.json merge** = add the missing hook-event entries to the existing `hooks` object; never clobber other hooks or settings.
 
 ## Step 4 — Existing project: prefill the new context files (optional)
