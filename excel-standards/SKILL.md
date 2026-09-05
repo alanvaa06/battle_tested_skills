@@ -1,6 +1,6 @@
 ---
 name: excel-standards
-description: Excel and financial-model best practices (CFI-based) — sheet structure, blue/black/green font conventions, formula discipline, balance-sheet checks and cash-flow tie-outs, scenario switches, sensitivities, charts, performance, and keyboard shortcuts. Use whenever building, editing, reviewing, or auditing an Excel model or spreadsheet — three-statement models, DCF/valuations, projections, budgets, LBOs, operating models, dashboards, or any .xlsx workbook — even if the user never says "best practices". Complements the `xlsx` skill: `xlsx` does the file mechanics (read/write/format cells), this governs how the model itself should be designed, checked, and delivered.
+description: Excel and financial-model best practices (CFI-based) — sheet structure, blue/black/green font conventions, formula discipline, balance-sheet checks and cash-flow tie-outs, scenario switches, sensitivities, charts, performance, and keyboard shortcuts. Use whenever building, editing, reviewing, or auditing an Excel model or spreadsheet — three-statement models, DCF/valuations, projections, budgets, LBOs, operating models, dashboards, or any .xlsx workbook — even if the user never says "best practices". Complements the `xlsx` skill, which does the file mechanics (read/write/format cells), this governs how the model itself should be designed, checked, and delivered.
 ---
 
 # Excel Best Practices (CFI-based)

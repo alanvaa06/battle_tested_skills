@@ -1,6 +1,6 @@
 ---
 name: scaffold
-description: Verify or create a project's context system — a docs/context/ working memory (memory, lessons, todo, results, sesion-log), a CLAUDE.md that reads it ON DEMAND (never bulk), hard size caps enforced by a UserPromptSubmit hook + /compact-context command, state-capture hooks (SubagentStop, SessionEnd, PreCompact), companion skills (python-standards, excel-standards), and a project-specific system persona. Idempotent: brings a project up to the convention and no-ops if it already conforms. Use whenever the user says "scaffold", "set up the context system", "add the docs/context convention", "wire up the caps hook", "initialize CLAUDE.md", or starts work in a repo that has no docs/context/ or a CLAUDE.md missing the on-demand-read convention.
+description: Verify or create a project's context system — a docs/context/ working memory (memory, lessons, todo, results, sesion-log), a CLAUDE.md that reads it ON DEMAND (never bulk), hard size caps enforced by a UserPromptSubmit hook + /compact-context command, state-capture hooks (SubagentStop, SessionEnd, PreCompact), companion skills (python-standards, excel-standards), and a project-specific system persona. Idempotent, brings a project up to the convention and no-ops if it already conforms. Use whenever the user says "scaffold", "set up the context system", "add the docs/context convention", "wire up the caps hook", "initialize CLAUDE.md", or starts work in a repo that has no docs/context/ or a CLAUDE.md missing the on-demand-read convention.
 disable-model-invocation: true
 ---
 
