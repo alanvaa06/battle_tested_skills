@@ -18,6 +18,12 @@ memory or the README. The README is read for names and for the user flow only.
   Postgres, the page does not say it either.
 - **Fixed design.** Use `templates/architecture.html` as is. Replace only the
   `{{TOKENS}}` and the content between `<!-- LENS:x -->` markers.
+- **Theme is a build-time choice, never the viewer's system setting.** The page
+  ships in exactly one palette, `light` or `dark`, set by the `{{THEME}}` token
+  on `.page`. If the invoking message names it (light/claro, dark/oscuro), use
+  it; otherwise ask once before section 1, as a lettered choice:
+  a) light, b) dark. Do not add `prefers-color-scheme` rules, a theme toggle, or
+  a second palette, even if a design or artifact skill suggests one.
 - **Language** of the page: the language of the invoking message.
 - **Translate every literal.** `fuente`, `No encontrado`, `Buscamos`, `implementas:`,
   the arrow labels, the layer captions and the footer are the Spanish defaults;
@@ -166,7 +172,9 @@ equivalent is `grep -rnE '<pattern>' --include='*.py'`.
 
 ## 7. Publish
 
-1. Load the `artifact-design` skill (required before writing any artifact).
+1. Load the `artifact-design` skill (required before writing any artifact). Its
+   light/dark-by-system guidance does not apply here: keep the single
+   `{{THEME}}` palette chosen in section 0.
 2. Write `<repo-root>/docs/architecture/index.html` and copy `inventory.json`
    next to it.
 3. Publish. On a re-run, read `<repo-root>/docs/architecture/artifact.url` and

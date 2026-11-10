@@ -11,18 +11,11 @@
   --serif:"IBM Plex Serif",Georgia,"Times New Roman",serif;
   --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0F1418; --surface:#161C23; --ink:#E4E9EE; --muted:#93A0AD; --line:#2A343F; --line-soft:#212A34;
-    --accent:#55B6D0; --accent-soft:#14323C; --accent-ink:#8ED2E4;
-    --yes:#6CC48E; --yes-soft:#17301F; --warn:#E0B65A; --warn-soft:#3A2E12; --no:#E38680; --no-soft:#3A1E1C;
-    --code:#14323C; --storage:#17301F; --external:#26223C; --flow:#332C1A; --infra:#1C232B;
-    --code-ink:#5FBBD6; --storage-ink:#6CC48E; --external-ink:#A99DE8; --flow-ink:#E0B65A;
-    --code-bg:#1D252E;
-  }
-}
-:root[data-theme="dark"]{
+/* Theme is fixed at build time by {{THEME}} on .page (light | dark); it never follows the viewer's system setting. */
+:root:has(.page[data-theme="dark"]){
+  color-scheme:dark;
   --bg:#0F1418; --surface:#161C23; --ink:#E4E9EE; --muted:#93A0AD; --line:#2A343F; --line-soft:#212A34;
   --accent:#55B6D0; --accent-soft:#14323C; --accent-ink:#8ED2E4;
   --yes:#6CC48E; --yes-soft:#17301F; --warn:#E0B65A; --warn-soft:#3A2E12; --no:#E38680; --no-soft:#3A1E1C;
@@ -99,7 +92,7 @@ figcaption{font-size:13.5px;color:var(--muted);margin-top:8px;max-width:68ch}
 footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);max-width:68ch}
 </style>
 
-<div class="page">
+<div class="page" data-theme="{{THEME}}">
 <nav class="toc" aria-label="Contenido">
   <div class="lbl">{{NAV_LABEL}}</div>
   <ol>
